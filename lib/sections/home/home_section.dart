@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:jcgpl_portfolio/core/theme/responsive.dart';
 import 'package:jcgpl_portfolio/shell/widgets/top_nav.dart';
-import 'package:jcgpl_portfolio/widgets/animated_role_text.dart';
-import 'package:jcgpl_portfolio/widgets/availability_badge_pill.dart';
-import 'package:jcgpl_portfolio/widgets/neu_avatar_frame.dart';
+import 'package:jcgpl_portfolio/sections/home/widgets/animated_role_text.dart';
+import 'package:jcgpl_portfolio/sections/home/widgets/availability_badge_pill.dart';
+import 'package:jcgpl_portfolio/sections/home/widgets/neu_avatar_frame.dart';
 import 'package:jcgpl_portfolio/widgets/neu_cta_button.dart';
-import 'package:jcgpl_portfolio/widgets/neu_cta_button_filled.dart';
+import 'package:jcgpl_portfolio/sections/home/widgets/neu_cta_button_filled.dart';
 import 'package:jcgpl_portfolio/widgets/neu_divider.dart';
 
 class LandingSection extends StatelessWidget {

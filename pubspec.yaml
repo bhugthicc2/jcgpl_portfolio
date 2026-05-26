@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   google_fonts: ^8.1.0
   flutter_svg: ^2.3.0
+  visibility_detector: ^0.4.0+2
 
   cupertino_icons: ^1.0.8
 
@@ -24,6 +25,8 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/images/
+    - assets/images/projects/
     - assets/svg/logo.svg
     - assets/images/profile.png
   #   - images/a_dot_ham.jpeg
