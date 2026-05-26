@@ -12,7 +12,7 @@ class AboutSection extends StatelessWidget {
       builder: (context, r) => Padding(
         padding: EdgeInsets.symmetric(
           horizontal: r.horizontalPadding,
-          vertical: 64,
+          vertical: 10,
         ),
         child: r.isMobile ? MobileLayout(r: r) : DesktopLayout(r: r),
       ),

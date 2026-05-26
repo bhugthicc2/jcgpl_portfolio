@@ -37,21 +37,27 @@ class NavBar extends StatelessWidget {
       height: theme.height,
       decoration: BoxDecoration(
         color: theme.base,
-        boxShadow: [
-          BoxShadow(
-            color: theme.lightShadow,
-            blurRadius: theme.blurRadius * 1.2,
-            offset: Offset(
-              -theme.shadowOffset * 0.8,
-              -theme.shadowOffset * 0.8,
-            ),
+        border: Border(
+          bottom: BorderSide(
+            width: 1,
+            color: theme.foreground.withValues(alpha: 0.1),
           ),
-          BoxShadow(
-            color: theme.darkShadow,
-            blurRadius: theme.blurRadius * 1.2,
-            offset: Offset(theme.shadowOffset * 0.8, theme.shadowOffset * 0.8),
-          ),
-        ],
+        ),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: theme.lightShadow,
+        //     blurRadius: theme.blurRadius * 1.2,
+        //     offset: Offset(
+        //       -theme.shadowOffset * 0.8,
+        //       -theme.shadowOffset * 0.8,
+        //     ),
+        //   ),
+        //   BoxShadow(
+        //     color: theme.darkShadow,
+        //     blurRadius: theme.blurRadius * 1.2,
+        //     offset: Offset(theme.shadowOffset * 0.8, theme.shadowOffset * 0.8),
+        //   ),
+        // ],
       ),
       padding: EdgeInsets.symmetric(horizontal: padding),
       child: Row(

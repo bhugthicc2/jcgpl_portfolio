@@ -88,7 +88,7 @@ class SkillsSection extends StatelessWidget {
       builder: (context, r) => Padding(
         padding: EdgeInsets.symmetric(
           horizontal: r.horizontalPadding,
-          vertical: 64,
+          vertical: 10,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
