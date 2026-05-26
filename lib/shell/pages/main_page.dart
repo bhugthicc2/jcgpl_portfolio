@@ -128,7 +128,7 @@ class _MainPageState extends State<MainPage> {
         children: [
           TopNav(
             theme: theme,
-
+            activeItemLabel: _activeSection.label,
             logo: GestureDetector(
               onTap: () => _scrollTo(PortfolioSection.landing),
               child: MouseRegion(

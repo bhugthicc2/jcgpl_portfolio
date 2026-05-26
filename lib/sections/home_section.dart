@@ -4,6 +4,7 @@ import 'package:jcgpl_portfolio/shell/widgets/top_nav.dart';
 import 'package:jcgpl_portfolio/widgets/animated_role_text.dart';
 import 'package:jcgpl_portfolio/widgets/availability_badge_pill.dart';
 import 'package:jcgpl_portfolio/widgets/neu_avatar_frame.dart';
+import 'package:jcgpl_portfolio/widgets/neu_cta_button.dart';
 import 'package:jcgpl_portfolio/widgets/neu_cta_button_filled.dart';
 import 'package:jcgpl_portfolio/widgets/neu_divider.dart';
 
@@ -115,7 +116,7 @@ class _InfoContent extends StatelessWidget {
         const NeuDivider(),
         const SizedBox(height: 16),
         Text(
-          "A Computer Science student focused on Flutter development, Firebase systems, and modern cross-platform applications — turning ideas into smooth, production-ready experiences.",
+          "A Computer Science student focused on Flutter development, Firebase systems, and modern cross-platform applications turning ideas into smooth, production-ready experiences.",
           style: TextStyle(
             fontSize: r.bodyFontSize,
             color: const Color(0xFF4a5e7a),
