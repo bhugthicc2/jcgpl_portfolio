@@ -14,14 +14,17 @@ import 'dart:html' as html;
 import 'package:url_launcher/url_launcher.dart';
 
 class LandingSection extends StatelessWidget {
-  const LandingSection({super.key});
+  final VoidCallback onContactTap;
+  const LandingSection({super.key, required this.onContactTap});
 
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
       builder: (context, r) => Padding(
         padding: EdgeInsets.symmetric(horizontal: r.horizontalPadding),
-        child: r.isMobile ? _MobileLayout(r: r) : _DesktopLayout(r: r),
+        child: r.isMobile
+            ? _MobileLayout(r: r, onContactTap: onContactTap)
+            : _DesktopLayout(r: r, onContactTap: onContactTap),
       ),
     );
   }
@@ -30,7 +33,8 @@ class LandingSection extends StatelessWidget {
 // Desktop: side-by-side Row
 class _DesktopLayout extends StatelessWidget {
   final Responsive r;
-  const _DesktopLayout({required this.r});
+  final VoidCallback onContactTap;
+  const _DesktopLayout({required this.r, required this.onContactTap});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +42,9 @@ class _DesktopLayout extends StatelessWidget {
       height: r.sectionHeight,
       child: Row(
         children: [
-          Expanded(child: _InfoContent(r: r)),
+          Expanded(
+            child: _InfoContent(r: r, onContactTap: onContactTap),
+          ),
           Expanded(
             child: Center(
               child: NeuAvatarFrame(
@@ -59,7 +65,8 @@ class _DesktopLayout extends StatelessWidget {
 // Mobile: stacked Column
 class _MobileLayout extends StatelessWidget {
   final Responsive r;
-  const _MobileLayout({required this.r});
+  final VoidCallback onContactTap;
+  const _MobileLayout({required this.r, required this.onContactTap});
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +79,7 @@ class _MobileLayout extends StatelessWidget {
             child: Image.asset('assets/images/profile.png', fit: BoxFit.cover),
           ),
           const SizedBox(height: 32),
-          _InfoContent(r: r),
+          _InfoContent(r: r, onContactTap: onContactTap),
         ],
       ),
     );
@@ -82,7 +89,8 @@ class _MobileLayout extends StatelessWidget {
 // Shared info content — used by both layouts
 class _InfoContent extends StatelessWidget {
   final Responsive r;
-  const _InfoContent({required this.r});
+  final VoidCallback onContactTap;
+  const _InfoContent({required this.r, required this.onContactTap});
 
   @override
   Widget build(BuildContext context) {
@@ -135,14 +143,12 @@ class _InfoContent extends StatelessWidget {
           children: [
             NeuCtaButtonFilled(
               label: "Download CV",
-              onTap:
-                  //todo
-                  _downloadCV,
+              onTap: _downloadCV,
               theme: const NeuTopNavTheme(),
             ),
             NeuCtaButton(
               label: "Contact Me",
-              onTap: () {},
+              onTap: onContactTap,
               theme: const NeuTopNavTheme(),
             ),
           ],

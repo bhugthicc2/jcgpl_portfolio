@@ -169,7 +169,9 @@ class _MainPageState extends State<MainPage> {
                 children: [
                   SectionShell(
                     sectionKey: _sectionKeys[PortfolioSection.landing]!,
-                    child: const LandingSection(),
+                    child: LandingSection(
+                      onContactTap: () => _scrollTo(PortfolioSection.contact),
+                    ),
                   ),
                   SectionShell(
                     sectionKey: _sectionKeys[PortfolioSection.about]!,
