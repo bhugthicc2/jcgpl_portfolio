@@ -37,7 +37,7 @@ class ProjectCardState extends State<ProjectCard> {
         child: Container(
           decoration: BoxDecoration(
             color: theme.base,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(24),
             boxShadow: theme.raisedShadows,
           ),
           padding: const EdgeInsets.all(10),
@@ -45,7 +45,7 @@ class ProjectCardState extends State<ProjectCard> {
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               color: theme.base,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(24),
               boxShadow: theme.insetShadows,
             ),
             child: Column(
