@@ -7,6 +7,11 @@ import 'package:jcgpl_portfolio/sections/home/widgets/neu_avatar_frame.dart';
 import 'package:jcgpl_portfolio/widgets/neu_cta_button.dart';
 import 'package:jcgpl_portfolio/sections/home/widgets/neu_cta_button_filled.dart';
 import 'package:jcgpl_portfolio/widgets/neu_divider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
+
+import 'package:url_launcher/url_launcher.dart';
 
 class LandingSection extends StatelessWidget {
   const LandingSection({super.key});
@@ -130,7 +135,9 @@ class _InfoContent extends StatelessWidget {
           children: [
             NeuCtaButtonFilled(
               label: "Download CV",
-              onTap: () {},
+              onTap:
+                  //todo
+                  _downloadCV,
               theme: const NeuTopNavTheme(),
             ),
             NeuCtaButton(
@@ -142,5 +149,21 @@ class _InfoContent extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Future<void> _downloadCV() async {
+    if (kIsWeb) {
+      html.AnchorElement(href: '/assets/assets/cv/jesie_gapol_cv.pdf')
+        ..setAttribute('download', 'Jesie_Gapol_CV.pdf')
+        ..click();
+      return;
+    }
+    // Mobile fallback
+    final uri = Uri.parse(
+      'https://drive.google.com/file/d/1rhXGQDRWRHurO5rDJ_Ixxa_NFVrQdfsF/view?usp=sharing',
+    );
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 }

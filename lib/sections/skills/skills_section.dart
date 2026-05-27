@@ -1,79 +1,96 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jcgpl_portfolio/core/theme/responsive.dart';
 import 'package:jcgpl_portfolio/shell/widgets/nav/neu_top_nav_theme.dart';
 import 'package:jcgpl_portfolio/widgets/neu_divider.dart';
+import 'package:simple_icons/simple_icons.dart';
 
-// Data models
+// Data model
 
 class SkillItem {
   final String name;
-  final String? svgAsset; // local asset path
-  final String? svgNetwork; // fallback network SVG (Simple Icons CDN)
-
-  const SkillItem({required this.name, this.svgAsset, this.svgNetwork});
-}
-
-class SkillCategory {
-  final String title;
   final IconData icon;
-  final List<SkillItem> skills;
+  final Color brandColor;
 
-  const SkillCategory({
-    required this.title,
+  const SkillItem({
+    required this.name,
     required this.icon,
-    required this.skills,
+    required this.brandColor,
   });
 }
 
-// Simple Icons CDN base — free, no API key needed
-const _si = 'https://cdn.simpleicons.org';
+const _skills = [
+  // Frontend
+  SkillItem(
+    name: 'Flutter',
+    icon: SimpleIcons.flutter,
+    brandColor: Color(0xFF54C5F8),
+  ),
+  SkillItem(
+    name: 'Dart',
+    icon: SimpleIcons.dart,
+    brandColor: Color(0xFF00B4AB),
+  ),
+  SkillItem(
+    name: 'HTML',
+    icon: SimpleIcons.html5,
+    brandColor: Color(0xFFE34C26),
+  ),
+  SkillItem(name: 'CSS', icon: SimpleIcons.css3, brandColor: Color(0xFF1572B6)),
+  SkillItem(
+    name: 'Javascript',
+    icon: SimpleIcons.javascript,
+    brandColor: Color(0xFFFFCA28),
+  ),
+  // Backend / Cloud
+  SkillItem(
+    name: 'Firebase',
+    icon: SimpleIcons.firebase,
+    brandColor: Color(0xFFFFCA28),
+  ),
+  SkillItem(
+    name: 'Firestore',
+    icon: SimpleIcons.firebase,
+    brandColor: Color(0xFFFFCA28),
+  ),
+  SkillItem(
+    name: 'Firebase Auth',
+    icon: SimpleIcons.firebase,
+    brandColor: Color(0xFFFFCA28),
+  ),
+  SkillItem(
+    name: 'SQL',
+    icon: SimpleIcons.mysql,
+    brandColor: Color(0xFF4479A1),
+  ),
+  SkillItem(
+    name: 'REST APIs',
+    icon: SimpleIcons.fastapi,
+    brandColor: Color(0xFF009688),
+  ),
+  SkillItem(
+    name: 'Railway',
+    icon: SimpleIcons.railway,
+    brandColor: Color(0xFF4285F4),
+  ),
 
-const _categories = [
-  SkillCategory(
-    title: 'Frontend',
-    icon: Icons.phone_android_rounded,
-    skills: [
-      SkillItem(name: 'Flutter', svgNetwork: '$_si/flutter/6C8EBF'),
-      SkillItem(name: 'Dart', svgNetwork: '$_si/dart/6C8EBF'),
-      SkillItem(
-        name: 'Responsive UI',
-        svgNetwork: '$_si/materialdesign/6C8EBF',
-      ),
-      SkillItem(
-        name: 'Material Design',
-        svgNetwork: '$_si/materialdesign/6C8EBF',
-      ),
-    ],
+  // Tools
+  SkillItem(name: 'Git', icon: SimpleIcons.git, brandColor: Color(0xFFF05032)),
+  SkillItem(
+    name: 'GitHub',
+    icon: SimpleIcons.github,
+    brandColor: Color(0xFF181717),
   ),
-  SkillCategory(
-    title: 'Backend / Cloud',
-    icon: Icons.cloud_rounded,
-    skills: [
-      SkillItem(name: 'Firebase', svgNetwork: '$_si/firebase/6C8EBF'),
-      SkillItem(name: 'Firestore', svgNetwork: '$_si/firebase/6C8EBF'),
-      SkillItem(name: 'Firebase Auth', svgNetwork: '$_si/firebase/6C8EBF'),
-    ],
+  SkillItem(
+    name: 'Figma',
+    icon: SimpleIcons.figma,
+    brandColor: Color(0xFFF24E1E),
   ),
-  SkillCategory(
-    title: 'Tools',
-    icon: Icons.build_rounded,
-    skills: [
-      SkillItem(name: 'Git', svgNetwork: '$_si/git/6C8EBF'),
-      SkillItem(name: 'GitHub', svgNetwork: '$_si/github/6C8EBF'),
-      SkillItem(name: 'VS Code', svgNetwork: '$_si/visualstudiocode/6C8EBF'),
-      SkillItem(name: 'Figma', svgNetwork: '$_si/figma/6C8EBF'),
-    ],
-  ),
-  SkillCategory(
-    title: 'Other',
-    icon: Icons.widgets_rounded,
-    skills: [
-      SkillItem(name: 'REST APIs', svgNetwork: '$_si/fastapi/6C8EBF'),
 
-      SkillItem(name: 'AES Encryption', svgNetwork: '$_si/letsencrypt/6C8EBF'),
-      SkillItem(name: 'SQL Basics', svgNetwork: '$_si/mysql/6C8EBF'),
-    ],
+  // Other
+  SkillItem(
+    name: 'AES Encryption',
+    icon: SimpleIcons.letsencrypt,
+    brandColor: Color(0xFF003A70),
   ),
 ];
 
@@ -95,7 +112,7 @@ class SkillsSection extends StatelessWidget {
           children: [
             _SectionHeading(r: r),
             const SizedBox(height: 36),
-            r.isMobile ? _MobileGrid() : _DesktopGrid(),
+            _SkillGrid(r: r),
           ],
         ),
       ),
@@ -126,208 +143,137 @@ class _SectionHeading extends StatelessWidget {
         const SizedBox(height: 10),
         const NeuDivider(),
         const SizedBox(height: 8),
-        const Text(
+        Text(
           'Technologies and tools I work with',
-          style: TextStyle(fontSize: 14, color: Color(0xFF4a5e7a)),
+          style: TextStyle(
+            fontSize: r.bodyFontSize,
+            color: const Color(0xFF4a5e7a),
+          ),
         ),
       ],
     );
   }
 }
 
-// Desktop: 2-column grid
+// Responsive grid
 
-class _DesktopGrid extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        for (int i = 0; i < _categories.length; i += 2)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 24),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: _CategoryCard(category: _categories[i])),
-                const SizedBox(width: 24),
-                Expanded(
-                  child: i + 1 < _categories.length
-                      ? _CategoryCard(category: _categories[i + 1])
-                      : const SizedBox.shrink(),
-                ),
-              ],
-            ),
-          ),
-      ],
-    );
-  }
-}
+class _SkillGrid extends StatelessWidget {
+  final Responsive r;
+  const _SkillGrid({required this.r});
 
-// Mobile: single column
-
-class _MobileGrid extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: _categories
-          .map(
-            (c) => Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: _CategoryCard(category: c),
-            ),
-          )
-          .toList(),
-    );
-  }
-}
-
-// Category card
-
-class _CategoryCard extends StatelessWidget {
-  final SkillCategory category;
-  const _CategoryCard({required this.category});
+  int get _columns => r.isMobile
+      ? 3
+      : r.isTablet
+      ? 4
+      : 5;
 
   @override
   Widget build(BuildContext context) {
-    const theme = NeuTopNavTheme();
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: theme.base,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: theme.raisedShadows,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Card header
-          Row(
+    final cols = _columns;
+    final rows = <Widget>[];
+
+    for (int i = 0; i < _skills.length; i += cols) {
+      final rowItems = _skills.sublist(i, (i + cols).clamp(0, _skills.length));
+
+      rows.add(
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: theme.base,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: theme.insetShadows,
-                ),
-                child: Icon(category.icon, size: 20, color: theme.accent),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                category.title,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF1e2f4d),
-                  letterSpacing: 0.2,
-                ),
-              ),
+              for (int j = 0; j < rowItems.length; j++) ...[
+                if (j > 0) const SizedBox(width: 16),
+                Expanded(child: _SkillCard(skill: rowItems[j])),
+              ],
+              // Fill empty slots in the last row
+              for (int k = rowItems.length; k < cols; k++) ...[
+                const SizedBox(width: 16),
+                const Expanded(child: SizedBox.shrink()),
+              ],
             ],
           ),
-          const SizedBox(height: 20),
-          // Skill tags wrap
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: category.skills.map((s) => _SkillTag(skill: s)).toList(),
-          ),
-        ],
-      ),
-    );
+        ),
+      );
+    }
+
+    return Column(children: rows);
   }
 }
 
-// Skill tag with logo
+// Individual skill card
 
-class _SkillTag extends StatefulWidget {
+class _SkillCard extends StatefulWidget {
   final SkillItem skill;
-  const _SkillTag({required this.skill});
+  const _SkillCard({required this.skill});
 
   @override
-  State<_SkillTag> createState() => _SkillTagState();
+  State<_SkillCard> createState() => _SkillCardState();
 }
 
-class _SkillTagState extends State<_SkillTag> {
+class _SkillCardState extends State<_SkillCard> {
   bool _hovered = false;
 
   @override
   Widget build(BuildContext context) {
     const theme = NeuTopNavTheme();
+
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
       cursor: SystemMouseCursors.basic,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
+        transform: Matrix4.identity()..scale(_hovered ? 1.03 : 1.0),
+        transformAlignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
         decoration: BoxDecoration(
           color: theme.base,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: _hovered ? theme.insetShadows : theme.raisedShadows,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: theme.raisedShadows,
         ),
-        child: Row(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _SkillLogo(skill: widget.skill),
-            const SizedBox(width: 8),
+            // Icon container — shadow swaps on hover
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: theme.base,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: theme.insetShadows,
+              ),
+              child: Center(
+                child: Icon(
+                  widget.skill.icon,
+                  size: 32,
+                  // Use brand color at full opacity when hovered,
+                  // slightly muted at rest
+                  color: widget.skill.brandColor.withValues(
+                    alpha: _hovered ? 1.0 : 0.75,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 14),
             Text(
               widget.skill.name,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: _hovered ? theme.accent : const Color(0xFF31456A),
                 letterSpacing: 0.2,
+                height: 1.4,
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-}
-
-// Logo: tries local SVG asset, falls back to network SVG
-
-class _SkillLogo extends StatelessWidget {
-  final SkillItem skill;
-  const _SkillLogo({required this.skill});
-
-  @override
-  Widget build(BuildContext context) {
-    const size = 18.0;
-    const color = Color(0xFF6C8EBF);
-
-    if (skill.svgAsset != null) {
-      return SvgPicture.asset(
-        skill.svgAsset!,
-        width: size,
-        height: size,
-        colorFilter: const ColorFilter.mode(color, BlendMode.srcIn),
-      );
-    }
-
-    if (skill.svgNetwork != null) {
-      return SvgPicture.network(
-        skill.svgNetwork!,
-        width: size,
-        height: size,
-        placeholderBuilder: (_) => SizedBox(
-          width: size,
-          height: size,
-          child: const CircularProgressIndicator(
-            strokeWidth: 1.5,
-            color: color,
-          ),
-        ),
-      );
-    }
-
-    // Fallback: accent dot
-    return Container(
-      width: size,
-      height: size,
-      decoration: const BoxDecoration(shape: BoxShape.circle, color: color),
     );
   }
 }

@@ -9,34 +9,37 @@ class AboutData {
       degree: "Bachelor of Science in Computer Science",
       school: "JRMSU Katipunan Campus",
       period: "2022 - Present",
-      description:
-          "Focused on software engineering, mobile development, and systems design.",
+      // description:
+      //     "Focused on software engineering, mobile development, and systems design.",
+      logoPath: "assets/logos/jrmsu.png",
     ),
     EducationEntry(
       degree: "Senior High School — TVL (CSS)",
       school: "Cogon National High School",
       period: "2020 - 2022",
-      description:
-          "Technical-Vocational-Livelihood track - Computer Systems Servicing.",
+      // description:
+      //     "Technical-Vocational-Livelihood track - Computer Systems Servicing.",
+      logoPath: "assets/logos/cogon_nhs.png",
     ),
     EducationEntry(
       degree: "Junior High School",
       school: "Cogon National High School",
       period: "2016 - 2020",
+      logoPath: "assets/logos/cogon_nhs.png",
     ),
     EducationEntry(
       degree: "Primary School",
       school: "Cayasan Elementary School",
       period: "2010 - 2016",
+      logoPath: "assets/logos/cayasan_es.png",
     ),
   ];
 
   static final List<PersonalDetail> details = [
-    PersonalDetail(icon: Icons.cake_rounded, label: "Age", value: "21"),
     PersonalDetail(
       icon: Icons.location_on_rounded,
       label: "Location",
-      value: "Philippines",
+      value: "Dipolog City, Philippines",
     ),
     PersonalDetail(
       icon: Icons.email_rounded,

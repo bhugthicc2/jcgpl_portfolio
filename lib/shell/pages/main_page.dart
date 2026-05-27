@@ -3,7 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jcgpl_portfolio/sections/about/about_section.dart';
 import 'package:jcgpl_portfolio/sections/contact/contact_section.dart';
-import 'package:jcgpl_portfolio/sections/experience/experience_section.dart';
+// import 'package:jcgpl_portfolio/sections/experience/experience_section.dart';
 import 'package:jcgpl_portfolio/sections/home/home_section.dart';
 import 'package:jcgpl_portfolio/sections/projects/projects_section.dart';
 import 'package:jcgpl_portfolio/sections/skills/skills_section.dart';
@@ -183,10 +183,10 @@ class _MainPageState extends State<MainPage> {
                     sectionKey: _sectionKeys[PortfolioSection.projects]!,
                     child: const ProjectsSection(),
                   ),
-                  SectionShell(
-                    sectionKey: _sectionKeys[PortfolioSection.experience]!,
-                    child: const ExperienceSection(),
-                  ),
+                  // SectionShell(
+                  //   sectionKey: _sectionKeys[PortfolioSection.experience]!,
+                  //   child: const ExperienceSection(),
+                  // ),
                   SectionShell(
                     sectionKey: _sectionKeys[PortfolioSection.contact]!,
                     child: const ContactSection(),

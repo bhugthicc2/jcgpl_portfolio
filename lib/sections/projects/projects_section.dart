@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:jcgpl_portfolio/core/theme/responsive.dart';
 import 'package:jcgpl_portfolio/sections/projects/data/projects_data.dart';
+import 'package:jcgpl_portfolio/sections/projects/project_modal.dart';
+import 'package:jcgpl_portfolio/sections/projects/widgets/project_card.dart';
 import 'package:jcgpl_portfolio/shell/widgets/nav/neu_top_nav_theme.dart';
 import 'package:jcgpl_portfolio/widgets/neu_divider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // Data model
 
@@ -10,32 +13,20 @@ class ProjectItem {
   final String title;
   final String description;
   final String? imagePath;
+  final List<String>? imagePaths;
   final List<String> techStack;
-  final ProjectStatus status;
+  final String? githubUrl;
+  final String? liveDemoUrl;
 
   const ProjectItem({
     required this.title,
     required this.description,
     required this.techStack,
     this.imagePath,
-    this.status = ProjectStatus.completed,
+    this.imagePaths,
+    this.githubUrl,
+    this.liveDemoUrl,
   });
-}
-
-enum ProjectStatus { completed, inProgress, archived }
-
-extension ProjectStatusX on ProjectStatus {
-  String get label => switch (this) {
-    ProjectStatus.completed => 'Completed',
-    ProjectStatus.inProgress => 'In Progress',
-    ProjectStatus.archived => 'Archived',
-  };
-
-  Color get color => switch (this) {
-    ProjectStatus.completed => const Color(0xFF4CAF82),
-    ProjectStatus.inProgress => const Color(0xFF6C8EBF),
-    ProjectStatus.archived => const Color(0xFFA3B1C6),
-  };
 }
 
 // Section root
@@ -56,11 +47,7 @@ class ProjectsSection extends StatelessWidget {
           children: [
             _SectionHeading(r: r),
             const SizedBox(height: 36),
-            r.isMobile
-                ? _MobileGrid()
-                : r.isTablet
-                ? _ProjectGrid(columns: 2)
-                : _ProjectGrid(columns: 3),
+            r.isMobile ? _ProjectGrid(columns: 1) : _ProjectGrid(columns: 2),
           ],
         ),
       ),
@@ -92,7 +79,7 @@ class _SectionHeading extends StatelessWidget {
         const NeuDivider(),
         const SizedBox(height: 8),
         Text(
-          'Things I\'ve built',
+          "Things I've built",
           style: TextStyle(
             fontSize: r.bodyFontSize,
             color: const Color(0xFF4a5e7a),
@@ -103,7 +90,7 @@ class _SectionHeading extends StatelessWidget {
   }
 }
 
-// Desktop grid — configurable columns
+// Grid
 
 class _ProjectGrid extends StatelessWidget {
   final int columns;
@@ -111,12 +98,13 @@ class _ProjectGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final projects = ProjectsData.projects;
     final rows = <Widget>[];
 
-    for (int i = 0; i < ProjectsData.projects.length; i += columns) {
-      final rowItems = ProjectsData.projects.sublist(
+    for (int i = 0; i < projects.length; i += columns) {
+      final rowItems = projects.sublist(
         i,
-        (i + columns).clamp(0, ProjectsData.projects.length),
+        (i + columns).clamp(0, projects.length),
       );
 
       rows.add(
@@ -127,9 +115,8 @@ class _ProjectGrid extends StatelessWidget {
             children: [
               for (int j = 0; j < rowItems.length; j++) ...[
                 if (j > 0) const SizedBox(width: 24),
-                Expanded(child: _ProjectCard(project: rowItems[j])),
+                Expanded(child: ProjectCard(project: rowItems[j])),
               ],
-              // Fill empty slots in last row
               for (int k = rowItems.length; k < columns; k++) ...[
                 const SizedBox(width: 24),
                 const Expanded(child: SizedBox.shrink()),
@@ -144,264 +131,95 @@ class _ProjectGrid extends StatelessWidget {
   }
 }
 
-// Mobile: single column
+// Link button
 
-class _MobileGrid extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: ProjectsData.projects
-          .map(
-            (p) => Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: _ProjectCard(project: p),
-            ),
-          )
-          .toList(),
-    );
-  }
-}
+class _LinkButton extends StatefulWidget {
+  final String label;
+  final IconData icon;
+  final String url;
+  final bool filled;
 
-// Project card
-
-class _ProjectCard extends StatefulWidget {
-  final ProjectItem project;
-  const _ProjectCard({required this.project});
+  const _LinkButton({
+    required this.label,
+    required this.icon,
+    required this.url,
+    this.filled = false,
+  });
 
   @override
-  State<_ProjectCard> createState() => _ProjectCardState();
+  State<_LinkButton> createState() => _LinkButtonState();
 }
 
-class _ProjectCardState extends State<_ProjectCard> {
+class _LinkButtonState extends State<_LinkButton> {
   bool _hovered = false;
+  bool _pressed = false;
+
+  Future<void> _launch() async {
+    final uri = Uri.parse(widget.url);
+    if (await canLaunchUrl(uri)) await launchUrl(uri);
+  }
 
   @override
   Widget build(BuildContext context) {
     const theme = NeuTopNavTheme();
+    final active = _hovered || _pressed;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
-        curve: Curves.easeOut,
-        decoration: BoxDecoration(
-          color: theme.base,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: _hovered ? theme.insetShadows : theme.raisedShadows,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Thumbnail
-            _ProjectThumbnail(project: widget.project, hovered: _hovered),
-            // Content
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Title row + status badge
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          widget.project.title,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFF1e2f4d),
-                            height: 1.3,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      _StatusBadge(status: widget.project.status),
-                    ],
+      onExit: (_) => setState(() {
+        _hovered = false;
+        _pressed = false;
+      }),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _pressed = true),
+        onTapUp: (_) {
+          setState(() => _pressed = false);
+          _launch();
+        },
+        onTapCancel: () => setState(() => _pressed = false),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+          decoration: BoxDecoration(
+            color: widget.filled ? theme.accent : theme.base,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: active ? theme.insetShadows : theme.raisedShadows,
+            border: widget.filled
+                ? null
+                : Border.all(
+                    color: theme.accent.withValues(alpha: active ? 0.45 : 0.0),
+                    width: 1.5,
                   ),
-                  const SizedBox(height: 8),
-                  // Description
-                  Text(
-                    widget.project.description,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: Color(0xFF4a5e7a),
-                      height: 1.65,
-                    ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 14),
-                  // Tech stack tags
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: widget.project.techStack
-                        .map((t) => _TechTag(label: t))
-                        .toList(),
-                  ),
-                ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                widget.icon,
+                size: 16,
+                color: widget.filled
+                    ? Colors.white
+                    : active
+                    ? theme.accent
+                    : theme.foreground,
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// Thumbnail — shows image or placeholder
-
-class _ProjectThumbnail extends StatelessWidget {
-  final ProjectItem project;
-  final bool hovered;
-
-  const _ProjectThumbnail({required this.project, required this.hovered});
-
-  @override
-  Widget build(BuildContext context) {
-    const theme = NeuTopNavTheme();
-
-    return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
-        curve: Curves.easeOut,
-        height: 160,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: hovered
-              ? theme.accent.withValues(alpha: 0.12)
-              : theme.darkShadow.withValues(alpha: 0.08),
-        ),
-        child: project.imagePath != null
-            ? Image.asset(
-                project.imagePath!,
-                fit: BoxFit.cover,
-                width: double.infinity,
-              )
-            : _ThumbnailPlaceholder(title: project.title, hovered: hovered),
-      ),
-    );
-  }
-}
-
-class _ThumbnailPlaceholder extends StatelessWidget {
-  final String title;
-  final bool hovered;
-
-  const _ThumbnailPlaceholder({required this.title, required this.hovered});
-
-  @override
-  Widget build(BuildContext context) {
-    const theme = NeuTopNavTheme();
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 160),
-            curve: Curves.easeOut,
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: theme.base,
-              borderRadius: BorderRadius.circular(14),
-              boxShadow: hovered ? theme.insetShadows : theme.raisedShadows,
-            ),
-            child: Icon(
-              Icons.folder_rounded,
-              size: 24,
-              color: hovered
-                  ? theme.accent
-                  : theme.foreground.withValues(alpha: 0.3),
-            ),
+              const SizedBox(width: 8),
+              Text(
+                widget.label,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: widget.filled
+                      ? Colors.white
+                      : active
+                      ? theme.accent
+                      : theme.foreground,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: hovered
-                  ? theme.accent
-                  : theme.foreground.withValues(alpha: 0.3),
-              letterSpacing: 0.3,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// Status badge
-
-class _StatusBadge extends StatelessWidget {
-  final ProjectStatus status;
-  const _StatusBadge({required this.status});
-
-  @override
-  Widget build(BuildContext context) {
-    const theme = NeuTopNavTheme();
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: theme.base,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: theme.insetShadows,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: status.color,
-            ),
-          ),
-          const SizedBox(width: 5),
-          Text(
-            status.label,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-              color: status.color,
-              letterSpacing: 0.4,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// Tech stack tag
-
-class _TechTag extends StatelessWidget {
-  final String label;
-  const _TechTag({required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    const theme = NeuTopNavTheme();
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: theme.base,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: theme.raisedShadows,
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          color: theme.accent,
-          letterSpacing: 0.3,
         ),
       ),
     );

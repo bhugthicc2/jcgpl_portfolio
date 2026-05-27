@@ -11,11 +11,11 @@ class DetailCard extends StatelessWidget {
     const theme = NeuTopNavTheme();
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
         color: theme.base,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: theme.raisedShadows,
+        //boxShadow: theme.raisedShadows,
       ),
       child: Row(
         children: [

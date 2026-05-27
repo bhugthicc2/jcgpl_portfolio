@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:jcgpl_portfolio/sections/about/models/education.dart';
 import 'package:jcgpl_portfolio/shell/widgets/nav/neu_top_nav_theme.dart';
 
@@ -11,7 +12,12 @@ class TimelineEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const theme = NeuTopNavTheme();
-
+    final style = GoogleFonts.poppins(
+      fontSize: 11,
+      fontWeight: FontWeight.w700,
+      color: theme.accent,
+      letterSpacing: 0.8,
+    );
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,62 +72,77 @@ class TimelineEntry extends StatelessWidget {
               decoration: BoxDecoration(
                 color: theme.base,
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: theme.raisedShadows,
+                //boxShadow: theme.raisedShadows,
               ),
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Period badge
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: theme.base,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: theme.insetShadows,
-                    ),
-                    child: Text(
-                      entry.period,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: theme.accent,
-                        letterSpacing: 0.8,
+                  //logo
+                  if (entry.logoPath != null) ...[
+                    Container(
+                      width: 52,
+                      height: 52,
+                      decoration: BoxDecoration(
+                        color: theme.base,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: theme.insetShadows,
+                      ),
+                      padding: const EdgeInsets.all(6),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.asset(
+                          entry.logoPath!,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    entry.degree,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF1e2f4d),
-                      height: 1.4,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    entry.school,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                      color: const Color(0xFF6C8EBF),
-                    ),
-                  ),
-                  if (entry.description != null) ...[
-                    const SizedBox(height: 8),
-                    Text(
-                      entry.description!,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: const Color(0xFF4a5e7a).withValues(alpha: 0.8),
-                        height: 1.6,
-                      ),
-                    ),
+                    const SizedBox(width: 14),
                   ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Period badge
+                        Text(entry.period, style: style),
+                        const SizedBox(height: 6),
+                        Text(
+                          entry.degree,
+                          style: TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: const Color(0xFF1e2f4d),
+                            height: 1.4,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          overflow: TextOverflow.ellipsis,
+                          entry.school,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xFF6C8EBF),
+                          ),
+                        ),
+                        if (entry.description != null) ...[
+                          const SizedBox(height: 8),
+                          Text(
+                            entry.description!,
+                            style: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 12,
+                              color: const Color(
+                                0xFF4a5e7a,
+                              ).withValues(alpha: 0.8),
+                              height: 1.6,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
