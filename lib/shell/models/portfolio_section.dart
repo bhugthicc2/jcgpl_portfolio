@@ -3,7 +3,7 @@ enum PortfolioSection {
   about,
   skills,
   projects,
-  // experience,
+  experience,
   contact;
 
   String get label => switch (this) {
@@ -11,7 +11,7 @@ enum PortfolioSection {
     PortfolioSection.about => 'About',
     PortfolioSection.skills => 'Skills',
     PortfolioSection.projects => 'Projects',
-    // PortfolioSection.experience => 'Experience',
+    PortfolioSection.experience => 'Experience',
     PortfolioSection.contact => 'Contact',
   };
 

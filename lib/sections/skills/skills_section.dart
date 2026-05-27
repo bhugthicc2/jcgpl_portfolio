@@ -88,7 +88,7 @@ const _skills = [
 
   // Other
   SkillItem(
-    name: 'AES Encryption',
+    name: 'AES',
     icon: SimpleIcons.letsencrypt,
     brandColor: Color(0xFF003A70),
   ),
@@ -183,7 +183,12 @@ class _SkillGrid extends StatelessWidget {
             children: [
               for (int j = 0; j < rowItems.length; j++) ...[
                 if (j > 0) const SizedBox(width: 16),
-                Expanded(child: _SkillCard(skill: rowItems[j])),
+                Expanded(
+                  child: _SkillCard(
+                    skill: rowItems[j],
+                    compact: r.isMobile,
+                  ),
+                ),
               ],
               // Fill empty slots in the last row
               for (int k = rowItems.length; k < cols; k++) ...[
@@ -204,7 +209,8 @@ class _SkillGrid extends StatelessWidget {
 
 class _SkillCard extends StatefulWidget {
   final SkillItem skill;
-  const _SkillCard({required this.skill});
+  final bool compact;
+  const _SkillCard({required this.skill, this.compact = false});
 
   @override
   State<_SkillCard> createState() => _SkillCardState();
@@ -217,63 +223,67 @@ class _SkillCardState extends State<_SkillCard> {
   Widget build(BuildContext context) {
     const theme = NeuTopNavTheme();
 
+    final cardContent = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Icon container — shadow swaps on hover
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          width: 64,
+          height: 64,
+          decoration: BoxDecoration(
+            color: theme.base,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: theme.insetShadows,
+          ),
+          child: Center(
+            child: Icon(
+              widget.skill.icon,
+              size: 32,
+              // Use brand color at full opacity when hovered,
+              // slightly muted at rest
+              color: widget.skill.brandColor.withValues(
+                alpha: _hovered ? 1.0 : 0.75,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 14),
+        Text(
+          widget.skill.name,
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: _hovered ? theme.accent : const Color(0xFF31456A),
+            letterSpacing: 0.2,
+            height: 1.4,
+          ),
+        ),
+      ],
+    );
+
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
       cursor: SystemMouseCursors.basic,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        curve: Curves.easeOut,
-        transform: Matrix4.identity()..scale(_hovered ? 1.03 : 1.0),
-        transformAlignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
-        decoration: BoxDecoration(
-          color: theme.base,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: theme.raisedShadows,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Icon container — shadow swaps on hover
-            AnimatedContainer(
+      child: widget.compact
+          ? cardContent
+          : AnimatedContainer(
               duration: const Duration(milliseconds: 180),
-              width: 64,
-              height: 64,
+              curve: Curves.easeOut,
+              transform: Matrix4.identity()..scale(_hovered ? 1.03 : 1.0),
+              transformAlignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
               decoration: BoxDecoration(
                 color: theme.base,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: theme.insetShadows,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: theme.raisedShadows,
               ),
-              child: Center(
-                child: Icon(
-                  widget.skill.icon,
-                  size: 32,
-                  // Use brand color at full opacity when hovered,
-                  // slightly muted at rest
-                  color: widget.skill.brandColor.withValues(
-                    alpha: _hovered ? 1.0 : 0.75,
-                  ),
-                ),
-              ),
+              child: cardContent,
             ),
-            const SizedBox(height: 14),
-            Text(
-              widget.skill.name,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: _hovered ? theme.accent : const Color(0xFF31456A),
-                letterSpacing: 0.2,
-                height: 1.4,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -159,7 +159,10 @@ class _InfoContent extends StatelessWidget {
 
   Future<void> _downloadCV() async {
     if (kIsWeb) {
-      html.AnchorElement(href: '/assets/assets/cv/jesie_gapol_cv.pdf')
+      final href = Uri.base
+          .resolve('assets/assets/cv/Jesie_Gapol_CV.pdf')
+          .toString();
+      html.AnchorElement(href: href)
         ..setAttribute('download', 'Jesie_Gapol_CV.pdf')
         ..click();
       return;
