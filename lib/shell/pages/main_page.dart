@@ -185,10 +185,10 @@ class _MainPageState extends State<MainPage> {
                     sectionKey: _sectionKeys[PortfolioSection.projects]!,
                     child: const ProjectsSection(),
                   ),
-                  SectionShell(
-                    sectionKey: _sectionKeys[PortfolioSection.experience]!,
-                    child: const ExperienceSection(),
-                  ),
+                  // SectionShell(
+                  //   sectionKey: _sectionKeys[PortfolioSection.experience]!,
+                  //   child: const ExperienceSection(),
+                  // ),
                   SectionShell(
                     sectionKey: _sectionKeys[PortfolioSection.contact]!,
                     child: const ContactSection(),

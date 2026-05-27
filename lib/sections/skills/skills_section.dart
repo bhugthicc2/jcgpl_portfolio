@@ -184,10 +184,7 @@ class _SkillGrid extends StatelessWidget {
               for (int j = 0; j < rowItems.length; j++) ...[
                 if (j > 0) const SizedBox(width: 16),
                 Expanded(
-                  child: _SkillCard(
-                    skill: rowItems[j],
-                    compact: r.isMobile,
-                  ),
+                  child: _SkillCard(skill: rowItems[j], compact: r.isMobile),
                 ),
               ],
               // Fill empty slots in the last row
