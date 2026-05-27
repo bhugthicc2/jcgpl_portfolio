@@ -243,7 +243,7 @@ class _ContactFormState extends State<_ContactForm> {
     // Opens the device mail client pre-filled — no backend needed
     final uri = Uri(
       scheme: 'mailto',
-      path: 'you@email.com',
+      path: 'gapoljesie23@email.com',
       query: Uri.encodeFull(
         'subject=Portfolio Contact — $name&body=$message\n\nFrom: $name\nEmail: $email',
       ),

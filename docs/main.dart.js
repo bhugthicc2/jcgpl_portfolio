@@ -81177,7 +81177,7 @@ m=B.c.dY(p.e.a.a)
 l=B.c.dY(p.f.a.a)
 if(n.length===0||m.length===0||l.length===0){s=1
 break}p.a_(new A.alB(p))
-o=A.Zb(null,"you@email.com",A.GV(4,"subject=Portfolio Contact \u2014 "+n+"&body="+l+"\n\nFrom: "+n+"\nEmail: "+m,B.ab,!1),null,"mailto")
+o=A.Zb(null,"gapoljesie23@email.com",A.GV(4,"subject=Portfolio Contact \u2014 "+n+"&body="+l+"\n\nFrom: "+n+"\nEmail: "+m,B.ab,!1),null,"mailto")
 s=5
 return A.T(A.aup(o),$async$pf)
 case 5:s=b?3:4
